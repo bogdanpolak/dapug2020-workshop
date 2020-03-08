@@ -31,7 +31,7 @@ Bogdan Polak is a Polish developer living both in Scotland and Poland. His profe
 | 11:10 *50min* | Extracting utility functions | Review of possible use of class and record helpers. Practical examples. Selecting and introducing good candidates for the helpers |
 | 12:00 | Lunch | |
 | 13:00 *60min* | Helper Good practices | Understanding the “dark side of class helpers”. Overview of helpers good and inconvenient candidates. Test-first approach. |
-| 14:10 *50min* | Test Drive Development | Incremental and high velocity Red-Green-Refactor cycles. Using TDD technique for expanding helpers library. |
+| 14:10 *50min* | Test Driven Development | Incremental and high velocity Red-Green-Refactor cycles. Using TDD technique for expanding helpers library. |
 | 15:10 *50min* | Helpers maintenance | Class helpers library as an independent project. Planing, branching model and release cycle. Continuous integration (CI/CD process). |
 
 ## PROGRAM - Day 2 - 29th April
