@@ -1,7 +1,7 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = 'CloudyBooks App'
   ClientHeight = 503
   ClientWidth = 521
   Color = clBtnFace
@@ -15,6 +15,7 @@ object Form1: TForm1
   Padding.Right = 5
   Padding.Bottom = 5
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object PageControl1: TPageControl
@@ -30,10 +31,6 @@ object Form1: TForm1
     TabWidth = 120
     object tshReading: TTabSheet
       Caption = 'Reading Now'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GroupBox1: TGroupBox
         AlignWithMargins = True
         Left = 8
@@ -73,7 +70,6 @@ object Form1: TForm1
           BevelOuter = bvNone
           Caption = 'Book details'
           TabOrder = 0
-          ExplicitHeight = 120
         end
         object Panel2: TPanel
           Left = 7
@@ -85,8 +81,6 @@ object Form1: TForm1
           BevelOuter = bvNone
           Caption = ' '
           TabOrder = 1
-          ExplicitLeft = 6
-          ExplicitTop = 144
           object Button1: TButton
             AlignWithMargins = True
             Left = 3
@@ -113,28 +107,10 @@ object Form1: TForm1
     object tshCatalog: TTabSheet
       Caption = 'Catalog'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 281
-      ExplicitHeight = 157
-      object ListBox1: TListBox
-        AlignWithMargins = True
-        Left = 3
-        Top = 3
-        Width = 491
-        Height = 445
-        Align = alClient
-        ItemHeight = 13
-        TabOrder = 0
-      end
     end
     object tshBookDetails: TTabSheet
       Caption = 'Book Details'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 281
-      ExplicitHeight = 157
     end
   end
   object tmrFormReady: TTimer

@@ -3,8 +3,15 @@ unit Form.Main;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls;
+  System.SysUtils,
+  System.Variants,
+  System.Classes,
+  Data.DB,
+
+  Winapi.Windows, Winapi.Messages,
+
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  Vcl.ExtCtrls, Vcl.ComCtrls;
 
 type
   TForm1 = class(TForm)
@@ -18,13 +25,12 @@ type
     Panel2: TPanel;
     Button1: TButton;
     Button2: TButton;
-    ListBox1: TListBox;
     tmrFormReady: TTimer;
     procedure tmrFormReadyTimer(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
-    { Private declarations }
   public
-    { Public declarations }
+    fBooksListView: TListBox;
   end;
 
 var
@@ -34,10 +40,32 @@ implementation
 
 {$R *.dfm}
 
+uses Module.Main;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  fBooksListView := TListBox.Create(Self);
+  fBooksListView.Align := alClient;
+  fBooksListView.AlignWithMargins := True;
+  fBooksListView.Parent := tshCatalog;
+end;
+
 procedure TForm1.tmrFormReadyTimer(Sender: TObject);
+var
+  ds: TDataSet;
+  i: Integer;
 begin
   tmrFormReady.Enabled := False;
-  // ...
+  DataModule1.FDQuery1.Open();
+  ds := DataModule1.FDQuery1;
+  for i := 0 to ds.RecordCount-1 do
+  begin
+    fBooksListView.Items.Add(
+      ds.FieldByName('ISBN').AsString + ' - ' +
+      ds.FieldByName('Title').AsString);
+    ds.Next;
+  end;
+
 end;
 
 end.
