@@ -11,7 +11,9 @@ uses
   Winapi.Windows, Winapi.Messages,
 
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
-  Vcl.ExtCtrls, Vcl.ComCtrls;
+  Vcl.ExtCtrls, Vcl.ComCtrls,
+
+  Component.TListBooks;
 
 type
   TForm1 = class(TForm)
@@ -30,7 +32,7 @@ type
     procedure FormCreate(Sender: TObject);
   private
   public
-    fBooksListView: TListBox;
+    fBooksListView: TListBooks;
   end;
 
 var
@@ -40,11 +42,17 @@ implementation
 
 {$R *.dfm}
 
-uses Module.Main;
+uses
+  Vcl.Themes,
+  Vcl.Styles,
+  Module.Main;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  fBooksListView := TListBox.Create(Self);
+  // TStyleManager.TrySetStyle('Windows10');
+  // TStyleManager.TrySetStyle('Windows10 Dark');
+  TStyleManager.TrySetStyle('Windows10 SlateGray');
+  fBooksListView := TListBooks.Create(Self);
   fBooksListView.Align := alClient;
   fBooksListView.AlignWithMargins := True;
   fBooksListView.Parent := tshCatalog;
@@ -56,16 +64,7 @@ var
   i: Integer;
 begin
   tmrFormReady.Enabled := False;
-  DataModule1.FDQuery1.Open();
-  ds := DataModule1.FDQuery1;
-  for i := 0 to ds.RecordCount-1 do
-  begin
-    fBooksListView.Items.Add(
-      ds.FieldByName('ISBN').AsString + ' - ' +
-      ds.FieldByName('Title').AsString);
-    ds.Next;
-  end;
-
+  fBooksListView.SetDataSet(DataModule1.FDQuery1);
 end;
 
 end.
