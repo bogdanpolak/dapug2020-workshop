@@ -31,6 +31,7 @@ type
     procedure tmrFormReadyTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
+    procedure BooksListViewClick(Sender: TObject);
   public
     fBooksListView: TListBooks;
   end;
@@ -47,6 +48,12 @@ uses
   Vcl.Styles,
   Module.Main;
 
+procedure TForm1.BooksListViewClick(Sender: TObject);
+begin
+  if fBooksListView.GetSelectedBook<>nil then
+    Caption := fBooksListView.GetSelectedBook.Title;
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   // TStyleManager.TrySetStyle('Windows10');
@@ -55,6 +62,7 @@ begin
   fBooksListView := TListBooks.Create(Self);
   fBooksListView.Align := alClient;
   fBooksListView.AlignWithMargins := True;
+  fBooksListView.OnClick := BooksListViewClick;
   fBooksListView.Parent := tshCatalog;
 end;
 

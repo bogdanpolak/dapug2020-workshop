@@ -29,10 +29,15 @@ type
 type
   TListBooks = class(TCustomListBox)
   private
-    procedure EventOnDrawBookItem(Control: TWinControl; Index: integer;
-      Rect: TRect; State: TOwnerDrawState);
+    fSelectedBook: TBook;
+  protected
+    procedure DrawItem(Index: Integer; Rect: TRect;
+      State: TOwnerDrawState); override;
+    procedure Click; override;
   public
+    constructor Create(Owner: TComponent); override;
     procedure SetDataSet(aDataSet: TDataSet);
+    function GetSelectedBook: TBook;
   published
     property Style;
     property AutoComplete;
@@ -110,32 +115,25 @@ type
 implementation
 
 
-procedure TListBooks.SetDataSet(aDataSet: TDataSet);
+procedure TListBooks.Click;
 var
-  aBookmark: TBookmark;
-  aBook:TBook;
+  aIndex: Integer;
 begin
-  if not aDataSet.Active then
-    aDataSet.Open;
-  aBookmark := aDataSet.GetBookmark;
-  try
-    while not aDataSet.Eof do
-    begin
-      aBook:=TBook.CreateFromDataSet(aDataSet);
-      Items.AddObject(aDataSet.FieldByName('ISBN').AsString, aBook);
-      aDataSet.Next;
-    end;
-    aDataSet.GotoBookmark(aBookmark);
-  finally
-    aDataSet.FreeBookmark(aBookmark);
-  end;
-  Self.OnDrawItem := EventOnDrawBookItem;
-  Self.Style := lbOwnerDrawFixed;
+  aIndex:= ItemIndex;
+  if aIndex>=0 then
+    fSelectedBook := Items.Objects[aIndex] as TBook;
+  inherited;
+end;
+
+constructor TListBooks.Create(Owner: TComponent);
+begin
+  inherited;
+  Style := lbOwnerDrawFixed;
   Self.ItemHeight := 60;
 end;
 
-procedure TListBooks.EventOnDrawBookItem(Control: TWinControl;
-  Index: integer; Rect: TRect; State: TOwnerDrawState);
+procedure TListBooks.DrawItem(Index: Integer; Rect: TRect;
+  State: TOwnerDrawState);
 var
   ACanvas: TCanvas;
   b: TBook;
@@ -148,12 +146,10 @@ var
   aHeightLine1: Integer;
   aHeightLine2: Integer;
 begin
+  // inherited;
   // TOwnerDrawState = set of (odSelected, odGrayed, odDisabled, odChecked,
   // odFocused, odDefault, odHotLight, odInactive, odNoAccel, odNoFocusRect,
   // odReserved1, odReserved2, odComboBoxEdit);
-  // lbx := Control as TCustomListBox;
-
-  // if (odSelected in State) and (odFocused in State) then
   if (odSelected in State) then
   begin
     {
@@ -201,7 +197,6 @@ begin
 
   Rect.Top := Rect.Top + 5;
   Rect.Left := Rect.Left + 13;
-  // ACanvas.Brush.Color := colorBackground;
   ACanvas.Brush.Style := bsClear;
 
   ACanvas.Font.Color := colorTextAuthor;
@@ -217,6 +212,32 @@ begin
   ACanvas.Font.Color := colorTextAuthor;
   ACanvas.Font.Size := Self.Font.Size;
   ACanvas.TextOut(13, Rect.Top + aHeightLine1 + aHeightLine2, b.author);
+end;
+
+function TListBooks.GetSelectedBook: TBook;
+begin
+  Result := fSelectedBook;
+end;
+
+procedure TListBooks.SetDataSet(aDataSet: TDataSet);
+var
+  aBookmark: TBookmark;
+  aBook:TBook;
+begin
+  if not aDataSet.Active then
+    aDataSet.Open;
+  aBookmark := aDataSet.GetBookmark;
+  try
+    while not aDataSet.Eof do
+    begin
+      aBook:=TBook.CreateFromDataSet(aDataSet);
+      Items.AddObject(aDataSet.FieldByName('ISBN').AsString, aBook);
+      aDataSet.Next;
+    end;
+    aDataSet.GotoBookmark(aBookmark);
+  finally
+    aDataSet.FreeBookmark(aBookmark);
+  end;
 end;
 
 { TBook }
